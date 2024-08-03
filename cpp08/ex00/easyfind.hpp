@@ -3,6 +3,7 @@
 
 #include<string>
 #include<iostream>
+#include <algorithm>
 
 template <typename T>
 class EasyFind {
