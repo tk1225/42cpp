@@ -33,4 +33,6 @@ int main()
     deque.push_back(5);
     EasyFind<std::deque<int> > c3(deque, 3);
     c3.seekInt();
+
+    // TODO: mapへの対応
 }
