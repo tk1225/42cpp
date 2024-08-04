@@ -1,6 +1,6 @@
 #include <iostream>
+#include <stdexcept>
 #include <string>
-#include <stdexcept> 
 
 template <typename T>
 class Array {
@@ -17,6 +17,14 @@ class Array {
     for (int i = 0; i < len; ++i) {
       arr[i] = other.arr[i];
     }
+  }
+
+  Array& operator=(const Array& ArrayClass) {
+    if (this != &ArrayClass) {
+      this->arr = ArrayClass.arr;
+      this->len = ArrayClass.len;
+    }
+    return *this;
   }
 
   ~Array() { delete[] arr; }
