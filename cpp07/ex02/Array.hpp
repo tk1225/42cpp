@@ -14,7 +14,7 @@ class Array {
 
   Array(const Array<T>& other) : len(other.len) {
     arr = new T[len];
-    for (int i = 0; i < len; ++i) {
+    for (unsigned int i = 0; i < len; ++i) {
       arr[i] = other.arr[i];
     }
   }
@@ -29,7 +29,7 @@ class Array {
 
   ~Array() { delete[] arr; }
 
-  T& operator[](int index) {
+  T& operator[](unsigned int index) {
     if (index < 0 || index >= len) {
       throw std::out_of_range("Index out of range");
     }
