@@ -1,19 +1,20 @@
 #include <iostream>
 #include <string>
+#include <stdexcept> 
 
 template <typename T>
 class Array {
  private:
   T* arr;
-  unsigned int size;
+  unsigned int len;
 
  public:
-  Array() : size(0) { arr = new T[]; }
-  Array(unsigned int n) : size(n) { arr = new T[size]; }
+  Array() : len(0) { arr = new T[0]; }
+  Array(unsigned int n) : len(n) { arr = new T[len]; }
 
-  Array(const Array<T>& other) : size(other.size) {
-    arr = new T[size];
-    for (int i = 0; i < size; ++i) {
+  Array(const Array<T>& other) : len(other.len) {
+    arr = new T[len];
+    for (int i = 0; i < len; ++i) {
       arr[i] = other.arr[i];
     }
   }
@@ -21,11 +22,11 @@ class Array {
   ~Array() { delete[] arr; }
 
   T& operator[](int index) {
-    if (index < 0 || index >= size) {
-      throw std::exception;
+    if (index < 0 || index >= len) {
+      throw std::out_of_range("Index out of range");
     }
     return arr[index];
   }
 
-  unsigned int size() { return this->size; }
+  unsigned int size() const { return this->len; }
 };
