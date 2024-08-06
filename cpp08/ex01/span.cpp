@@ -23,6 +23,14 @@ void Span::addNumber(int n) {
   }
 }
 
+void Span::insertNumbers(std::vector<int> insertVec) {
+  if (this->store.size() + insertVec.size() > len) {
+    throw std::runtime_error("store capacity is full");
+  } else {
+    this->store.insert(this->store.end(), insertVec.begin(), insertVec.end());
+  }
+}
+
 unsigned int Span::shortestSpan() {
   if (store.size() <= 1) {
     throw std::runtime_error("store capacity is not enough");

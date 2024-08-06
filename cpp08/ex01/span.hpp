@@ -20,6 +20,7 @@ class Span {
   Span& operator=(const Span& SpanClass);
   ~Span();
   void addNumber(int n);
+  void insertNumbers(std::vector<int> insertVec);
   unsigned int shortestSpan();
   unsigned int longestSpan();
 };
