@@ -1,12 +1,13 @@
 #include <deque>
 #include <iostream>
 #include <list>
+#include <numeric>
 #include <string>
 
 #include "span.hpp"
 
 int main() {
-  Span sp = Span(5);
+  Span sp = Span(7);
   sp.addNumber(6);
   sp.addNumber(3);
   sp.addNumber(17);
@@ -14,7 +15,16 @@ int main() {
   sp.addNumber(11);
   std::cout << sp.shortestSpan() << std::endl;
   std::cout << sp.longestSpan() << std::endl;
-  return 0;
+  sp.addNumber(12);
+  sp.addNumber(27);
+  std::cout << sp.shortestSpan() << std::endl;
+  std::cout << sp.longestSpan() << std::endl;
 
-  // TODO test追加
+  std::vector<int> vec(10000);
+  std::iota(vec.begin(), vec.end(), 1);
+  Span sp2 = Span(10000);
+  sp2.insertNumbers(vec);
+  std::cout << sp2.shortestSpan() << std::endl;
+  std::cout << sp2.longestSpan() << std::endl;
+  return 0;
 }

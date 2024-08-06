@@ -37,7 +37,7 @@ unsigned int Span::shortestSpan() {
   }
 
   unsigned int diff = std::numeric_limits<unsigned int>::max();
-  for (std::size_t i = 0; i < store.size(); ++i) {
+  for (std::size_t i = 0; i + 1 < store.size(); ++i) {
     unsigned int tmp_diff = std::abs(store[i] - store[i + 1]);
     if (tmp_diff < diff) {
       diff = tmp_diff;
@@ -52,7 +52,7 @@ unsigned int Span::longestSpan() {
   }
 
   unsigned int diff = 0;
-  for (std::size_t i = 0; i < store.size(); ++i) {
+  for (std::size_t i = 0; i + 1 < store.size(); ++i) {
     unsigned int tmp_diff = std::abs(store[i] - store[i + 1]);
     if (tmp_diff > diff) {
       diff = tmp_diff;
