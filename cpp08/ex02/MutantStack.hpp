@@ -1,30 +1,18 @@
+#include <deque>
 #include <iostream>
 #include <stack>
 #include <stdexcept>
 #include <string>
-
-template <typename T>
-class MutantStack {
- private:
-  std::stack<T> st;
-
+template <typename T, typename Container = std::deque<T> >
+class MutantStack : public std::stack<T, Container> {
  public:
   MutantStack() {};
-
-  MutantStack(const MutantStack<T>& other) { this->st = other.st; }
-
-  MutantStack& operator=(const MutantStack& MutantStackClass) {
-    if (this != &MutantStackClass) {
-      this->st = MutantStackClass.st;
-    }
-    return *this;
-  }
-
+  MutantStack(const MutantStack<T>& other) {}
+  MutantStack& operator=(const MutantStack& MutantStackClass) { return *this; }
   ~MutantStack() {}
 
-  unsigned int size() const { return this->st.size(); }
-  void push(T elem) { this->st.push(elem); }
-  void pop() { this->st.pop(); }
-  bool empty() { return this->st.empty(); }
-  T top() { return this->st.top(); }
+  typedef typename Container::iterator iterator;
+
+  iterator begin() { return this->c.begin(); }
+  iterator end() { return this->c.end(); }
 };
