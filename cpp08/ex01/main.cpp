@@ -4,7 +4,7 @@
 #include <numeric>
 #include <string>
 
-#include "span.hpp"
+#include "Span.hpp"
 
 int main() {
   Span sp = Span(7);

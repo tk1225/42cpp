@@ -15,6 +15,6 @@ public:
     void seekInt();
 };
 
-#include "easyfind.tpp"
+#include "EasyFind.tpp"
 
 #endif

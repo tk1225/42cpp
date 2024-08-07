@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "easyfind.hpp"
+#include "EasyFind.hpp"
 
 int main() {
   std::vector<int> numbers;
