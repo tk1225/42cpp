@@ -29,7 +29,7 @@ BitcoinExchange::BitcoinExchange() {
       unsigned int price = 0;
       try {
         price = stringToUnsignedInt(elem[1]);
-      } catch (std::exception& e){
+      } catch (std::exception& e) {
         std::cerr << e.what() << std::endl;
         std::exit(1);
       }
@@ -89,4 +89,17 @@ unsigned int BitcoinExchange::stringToUnsignedInt(const std::string& str) {
   } catch (const std::out_of_range& e) {
     throw std::out_of_range("Input is out of range for int.");
   }
+}
+
+unsigned int BitcoinExchange::searchPrice(const std::string& date) {
+  std::map<std::string, unsigned int>::iterator it = price_data.upper_bound(date);
+
+  if (it != price_data.begin()) {
+    --it;
+    std::cout << "Closest past date to " << date << ": " << it->first << "->" << it->second
+              << std::endl;
+  } else {
+    std::cout << "No earlier dates found." << std::endl;
+  }
+  return it->second;
 }
