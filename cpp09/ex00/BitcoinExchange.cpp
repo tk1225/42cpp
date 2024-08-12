@@ -92,14 +92,58 @@ unsigned int BitcoinExchange::stringToUnsignedInt(const std::string& str) {
 }
 
 unsigned int BitcoinExchange::searchPrice(const std::string& date) {
-  std::map<std::string, unsigned int>::iterator it = price_data.upper_bound(date);
+  std::map<std::string, unsigned int>::iterator it =
+      price_data.upper_bound(date);
 
   if (it != price_data.begin()) {
     --it;
-    std::cout << "Closest past date to " << date << ": " << it->first << "->" << it->second
-              << std::endl;
+    std::cout << "Closest past date to " << date << ": " << it->first << "->"
+              << it->second << std::endl;
   } else {
     std::cout << "No earlier dates found." << std::endl;
   }
   return it->second;
+}
+
+void BitcoinExchange::displayPrice(const std::string& filename) {
+  std::ifstream file(filename);
+  BitcoinExchange btc = BitcoinExchange();
+  std::string line;
+
+  if (file.is_open()) {
+    getline(file, line);
+    while (getline(file, line)) {
+      std::stringstream ss(line);
+      std::string value;
+      unsigned int line_size = 0;
+      std::string elem[2];
+
+      while (getline(ss, value, ',')) {
+        if (line_size < 2) {
+          elem[line_size] = value;
+        }
+        line_size++;
+      }
+      if (line_size != 2) {
+        std::cerr << "Error: line size is invalid in " << line << std::endl;
+        std::exit(1);
+      }
+      if (!isValidDate(elem[0])) {
+        std::cerr << "Error: date format is invalid in " << line << std::endl;
+        std::exit(1);
+      }
+      unsigned int price = 0;
+      try {
+        price = stringToUnsignedInt(elem[1]);
+      } catch (std::exception& e) {
+        std::cerr << e.what() << std::endl;
+        std::exit(1);
+      }
+      (void)price;
+      file.close();
+    }
+  } else {
+    std::cerr << "Error: could not open file." << std::endl;
+    std::exit(1);
+  }
 }

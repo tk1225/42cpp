@@ -21,6 +21,7 @@ class BitcoinExchange {
   BitcoinExchange& operator=(const BitcoinExchange& BitcoinExchangeClass);
   ~BitcoinExchange();
   unsigned int searchPrice(const std::string& date);
+  void displayPrice(const std::string& filename);
 };
 
 #endif
