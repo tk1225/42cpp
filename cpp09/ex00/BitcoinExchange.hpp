@@ -6,6 +6,7 @@
 #include <map>
 #include <sstream>
 #include <string>
+#include <cstdio>
 
 #define DEFAULT_FILENAME "data.csv"
 

@@ -56,19 +56,17 @@ BitcoinExchange& BitcoinExchange::operator=(
 }
 
 bool BitcoinExchange::isValidDate(const std::string& date) {
-  if (date.length() != 10) {
+  int year, month, day;
+
+  if (sscanf(date.c_str(), "%4d-%2d-%2d", &year, &month, &day) != 3) {
     return false;
   }
-  if (date[4] != '-' || date[7] != '-') {
+  std::cout << year << month << day << std::endl;
+  if (month < 1 || month > 12) {
     return false;
   }
-  for (std::string::size_type i = 0; i < date.length(); ++i) {
-    if (i == 4 || i == 7) {
-      continue;
-    }
-    if (!std::isdigit(date[i])) {
-      return false;
-    }
+  if (day > 31) {
+    return false;
   }
   return true;
 }
@@ -107,18 +105,19 @@ unsigned int BitcoinExchange::searchPrice(const std::string& date) {
 
 void BitcoinExchange::displayPrice(const std::string& filename) {
   std::ifstream file(filename);
-  BitcoinExchange btc = BitcoinExchange();
   std::string line;
 
   if (file.is_open()) {
     getline(file, line);
     while (getline(file, line)) {
+      line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
+
       std::stringstream ss(line);
       std::string value;
       unsigned int line_size = 0;
       std::string elem[2];
 
-      while (getline(ss, value, ',')) {
+      while (getline(ss, value, '|')) {
         if (line_size < 2) {
           elem[line_size] = value;
         }
@@ -126,22 +125,19 @@ void BitcoinExchange::displayPrice(const std::string& filename) {
       }
       if (line_size != 2) {
         std::cerr << "Error: line size is invalid in " << line << std::endl;
-        std::exit(1);
       }
       if (!isValidDate(elem[0])) {
         std::cerr << "Error: date format is invalid in " << line << std::endl;
-        std::exit(1);
       }
       unsigned int price = 0;
       try {
         price = stringToUnsignedInt(elem[1]);
       } catch (std::exception& e) {
         std::cerr << e.what() << std::endl;
-        std::exit(1);
       }
       (void)price;
-      file.close();
     }
+    file.close();
   } else {
     std::cerr << "Error: could not open file." << std::endl;
     std::exit(1);
