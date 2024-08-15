@@ -12,16 +12,16 @@
 
 class BitcoinExchange {
  private:
-  std::map<std::string, unsigned int> price_data;
+  std::map<std::string, double> price_data;
   bool isValidDate(const std::string& date);
-  unsigned int stringToUnsignedInt(const std::string& str);
+  double stringToDouble(const std::string& str);
 
  public:
   BitcoinExchange();
   BitcoinExchange(const BitcoinExchange& BitcoinExchangeClass);
   BitcoinExchange& operator=(const BitcoinExchange& BitcoinExchangeClass);
   ~BitcoinExchange();
-  unsigned int searchPrice(const std::string& date);
+  double searchPrice(const std::string& date);
   void displayPrice(const std::string& filename);
 };
 

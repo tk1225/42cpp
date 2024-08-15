@@ -28,7 +28,7 @@ BitcoinExchange::BitcoinExchange() {
       }
       unsigned int price = 0;
       try {
-        price = stringToUnsignedInt(elem[1]);
+        price = stringToDouble(elem[1]);
       } catch (std::exception& e) {
         std::cerr << e.what() << std::endl;
         std::exit(1);
@@ -71,26 +71,26 @@ bool BitcoinExchange::isValidDate(const std::string& date) {
   return true;
 }
 
-unsigned int BitcoinExchange::stringToUnsignedInt(const std::string& str) {
+double BitcoinExchange::stringToDouble(const std::string& str) {
   try {
-    int value = std::stoi(str);
+    double value = std::stod(str);
 
     if (value < 0) {
       throw std::invalid_argument(
-          "Negative value cannot be converted to unsigned int.");
+          "Negative value cannot be converted to positive double.");
     }
-    return static_cast<unsigned int>(value);
+    return value;
 
   } catch (const std::invalid_argument& e) {
     throw std::invalid_argument("Invalid input: " + str +
-                                " is not a valid integer.");
+                                " is not a valid number.");
   } catch (const std::out_of_range& e) {
-    throw std::out_of_range("Input is out of range for int.");
+    throw std::out_of_range("Input is out of range for double.");
   }
 }
 
-unsigned int BitcoinExchange::searchPrice(const std::string& date) {
-  std::map<std::string, unsigned int>::iterator it =
+double BitcoinExchange::searchPrice(const std::string& date) {
+  std::map<std::string, double>::iterator it =
       price_data.upper_bound(date);
 
   if (it != price_data.begin()) {
@@ -133,7 +133,7 @@ void BitcoinExchange::displayPrice(const std::string& filename) {
       }
       unsigned int price = 0;
       try {
-        price = stringToUnsignedInt(elem[1]);
+        price = stringToDouble(elem[1]);
       } catch (std::exception& e) {
         std::cerr << e.what() << std::endl;
         continue;
