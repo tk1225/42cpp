@@ -72,26 +72,23 @@ bool BitcoinExchange::isValidDate(const std::string& date) {
 }
 
 double BitcoinExchange::stringToDouble(const std::string& str) {
+  double value = 0;
   try {
-    double value = std::stod(str);
-
-    if (value < 0) {
-      throw std::invalid_argument(
-          "Negative value cannot be converted to positive double.");
-    }
-    return value;
-
+    value = std::stod(str);
   } catch (const std::invalid_argument& e) {
     throw std::invalid_argument("Invalid input: " + str +
                                 " is not a valid number.");
   } catch (const std::out_of_range& e) {
     throw std::out_of_range("Input is out of range for double.");
   }
+  if (value < 0) {
+    throw std::invalid_argument("Error: not a positive number.");
+  }
+  return value;
 }
 
 double BitcoinExchange::searchPrice(const std::string& date) {
-  std::map<std::string, double>::iterator it =
-      price_data.upper_bound(date);
+  std::map<std::string, double>::iterator it = price_data.upper_bound(date);
 
   if (it != price_data.begin()) {
     --it;
