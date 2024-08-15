@@ -84,6 +84,9 @@ double BitcoinExchange::stringToDouble(const std::string& str) {
   if (value < 0) {
     throw std::invalid_argument("Error: not a positive number.");
   }
+  if (value > 2147483647.0) {
+    throw std::out_of_range("Error: too large a number.");
+  }
   return value;
 }
 
@@ -120,12 +123,8 @@ void BitcoinExchange::displayPrice(const std::string& filename) {
         }
         line_size++;
       }
-      if (line_size != 2) {
-        std::cerr << "Error: line size is invalid in " << line << std::endl;
-        continue;
-      }
-      if (!isValidDate(elem[0])) {
-        std::cerr << "Error: date format is invalid in " << line << std::endl;
+      if (line_size != 2 || !isValidDate(elem[0])) {
+        std::cerr << "Error: bad input " << line << std::endl;
         continue;
       }
       unsigned int price = 0;
