@@ -26,7 +26,7 @@ BitcoinExchange::BitcoinExchange() {
         std::cerr << "Error: date format is invalid in " << line << std::endl;
         std::exit(1);
       }
-      unsigned int price = 0;
+      double price = 0;
       try {
         price = stringToDouble(elem[1]);
       } catch (std::exception& e) {
@@ -61,7 +61,6 @@ bool BitcoinExchange::isValidDate(const std::string& date) {
   if (sscanf(date.c_str(), "%4d-%2d-%2d", &year, &month, &day) != 3) {
     return false;
   }
-  std::cout << year << month << day << std::endl;
   if (month < 1 || month > 12) {
     return false;
   }
@@ -95,10 +94,6 @@ double BitcoinExchange::searchPrice(const std::string& date) {
 
   if (it != price_data.begin()) {
     --it;
-    std::cout << "Closest past date to " << date << ": " << it->first << "->"
-              << it->second << std::endl;
-  } else {
-    std::cout << "No earlier dates found." << std::endl;
   }
   return it->second;
 }
@@ -127,14 +122,17 @@ void BitcoinExchange::displayPrice(const std::string& filename) {
         std::cerr << "Error: bad input " << line << std::endl;
         continue;
       }
-      unsigned int price = 0;
+      double btc = 0;
       try {
-        price = stringToDouble(elem[1]);
+        btc = stringToDouble(elem[1]);
       } catch (std::exception& e) {
         std::cerr << e.what() << std::endl;
         continue;
       }
-      (void)price;
+      double asset_price = this->searchPrice(elem[0]) * btc;
+      std::cout << std::fixed << std::setprecision(2);
+      std::cout << elem[0] << " => " << elem[1] << " = " << asset_price
+                << std::endl;
     }
     file.close();
   } else {
