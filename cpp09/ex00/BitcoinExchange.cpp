@@ -125,15 +125,18 @@ void BitcoinExchange::displayPrice(const std::string& filename) {
       }
       if (line_size != 2) {
         std::cerr << "Error: line size is invalid in " << line << std::endl;
+        continue;
       }
       if (!isValidDate(elem[0])) {
         std::cerr << "Error: date format is invalid in " << line << std::endl;
+        continue;
       }
       unsigned int price = 0;
       try {
         price = stringToUnsignedInt(elem[1]);
       } catch (std::exception& e) {
         std::cerr << e.what() << std::endl;
+        continue;
       }
       (void)price;
     }
