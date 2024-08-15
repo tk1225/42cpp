@@ -130,7 +130,6 @@ void BitcoinExchange::displayPrice(const std::string& filename) {
         continue;
       }
       double asset_price = this->searchPrice(elem[0]) * btc;
-      std::cout << std::fixed << std::setprecision(2);
       std::cout << elem[0] << " => " << elem[1] << " = " << asset_price
                 << std::endl;
     }
