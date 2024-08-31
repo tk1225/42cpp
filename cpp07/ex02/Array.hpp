@@ -29,7 +29,7 @@ class Array {
 
   ~Array() { delete[] arr; }
 
-  T& operator[](unsigned int index) {
+  T& operator[](unsigned int index) const {
     if (index < 0 || index >= len) {
       throw std::out_of_range("Index out of range");
     }
