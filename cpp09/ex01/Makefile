@@ -1,5 +1,5 @@
 NAME := RPN
-FUNC	:= main.cpp
+FUNC	:= main.cpp RPN.cpp
 CXX		:= c++
 CXXFLAGS	:= -Wall -Wextra -Werror -std=c++98 -pedantic-errors
 
