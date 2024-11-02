@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "EasyFind.hpp"
+#include "easyfind.hpp"
 
 int main() {
   std::vector<int> numbers;
@@ -13,8 +13,7 @@ int main() {
   numbers.push_back(3);
   numbers.push_back(4);
   numbers.push_back(5);
-  EasyFind<std::vector<int> > c1(numbers, 3);
-  c1.seekInt();
+  EasyFind(numbers, 3);
 
   std::list<int> list;
   list.push_back(1);
@@ -22,8 +21,7 @@ int main() {
   list.push_back(3);
   list.push_back(4);
   list.push_back(5);
-  EasyFind<std::list<int> > c2(list, 3);
-  c2.seekInt();
+  EasyFind(list, 3);
 
   std::deque<int> deque;
   deque.push_back(1);
@@ -31,6 +29,5 @@ int main() {
   deque.push_back(3);
   deque.push_back(4);
   deque.push_back(5);
-  EasyFind<std::deque<int> > c3(deque, 3);
-  c3.seekInt();
+  EasyFind(deque, 3);
 }

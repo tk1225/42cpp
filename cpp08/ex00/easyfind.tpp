@@ -1,10 +1,10 @@
 template <typename T>
-void EasyFind<T>::seekInt() {
-  typename T::iterator it = std::find(value.begin(), value.end(), find);
+void EasyFind(T& val, int find) {
+  typename T::iterator it = std::find(val.begin(), val.end(), find);
 
-  if (it != value.end()) {
+  if (it != val.end()) {
     std::cout << "Value " << find << " found at position "
-              << std::distance(value.begin(), it) << std::endl;
+              << std::distance(val.begin(), it) << std::endl;
   } else {
     std::cout << "Value " << find << " not found" << std::endl;
   }
