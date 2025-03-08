@@ -7,6 +7,7 @@
 #include <sstream>
 #include <string>
 #include <cstdio>
+#include <cfloat>
 
 #define DEFAULT_FILENAME "data.csv"
 

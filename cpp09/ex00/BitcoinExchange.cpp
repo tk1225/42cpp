@@ -129,7 +129,12 @@ void BitcoinExchange::displayPrice(const std::string& filename) {
         std::cerr << e.what() << std::endl;
         continue;
       }
-      double asset_price = this->searchPrice(elem[0]) * btc;
+      double price = this->searchPrice(elem[0]);
+      if (price > DBL_MAX / btc) {
+        std::cerr << "Error: potential overflow in calculation." << std::endl;
+        continue;
+      }
+      double asset_price = price * btc;
       std::cout << elem[0] << " => " << elem[1] << " = " << asset_price
                 << std::endl;
     }
