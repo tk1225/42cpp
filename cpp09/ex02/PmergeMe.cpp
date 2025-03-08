@@ -1,71 +1,166 @@
 #include "PmergeMe.hpp"
 
-PmergeMe::PmergeMe() {}
+#include <cstdlib>
+#include <iostream>
+#include <sstream>
+
+int count = 0;
+
+long PmergeMe::jacobsthal_recursive(int n) {
+  if (n == 0) return 0;
+  if (n == 1) return 1;
+  return jacobsthal_recursive(n - 1) + 2 * jacobsthal_recursive(n - 2);
+}
+
+void PmergeMe::vectorFordJohnsonSort(std::vector<int>& vec) {
+  if (vec.size() <= 1) return;
+
+  std::vector<int> winners;
+  std::vector<int> losers;
+
+  for (size_t i = 0; i < vec.size(); i += 2) {
+    // std::cout << "Count: " << count << std::endl;
+
+    if (i + 1 < vec.size()) {
+      if (vec[i] < vec[i + 1]) {
+        winners.push_back(vec[i + 1]);
+        losers.push_back(vec[i]);
+      } else {
+        winners.push_back(vec[i]);
+        losers.push_back(vec[i + 1]);
+      }
+      //   count++;
+    } else {
+      winners.push_back(vec[i]);
+    }
+  }
+
+  vectorFordJohnsonSort(winners);
+
+  for (size_t i = losers.size(); i-- > 0;) {
+    int value = losers[i];
+
+    // print *************************
+    // std::cout << "***********************************" << std::endl;
+    // std::cout << "insert val " << value << std::endl;
+    // std::cout << "***********************************" << std::endl;
+    // std::cout << "losers vec: " << std::endl;
+    // for (size_t j = 0; j < losers.size(); ++j) {
+    //   std::cout << losers[j] << " ";
+    // }
+    // std::cout << std::endl;
+
+    // std::cout << "winners vec: " << std ::endl;
+    // for (size_t k = 0; k < winners.size(); ++k) {
+    //   std::cout << winners[k] << " ";
+    // }
+    // std::cout << std::endl;
+    // print *************************
+
+    size_t left = 0;
+    size_t right = jacobsthal_recursive(_vec_merge_count);
+
+    // std::cout << "jacob::  " << right << std::endl;
+
+    while (left < right) {
+      size_t mid = left + (right - left) / 2;
+      if (value < winners[mid])
+        right = mid;
+      else
+        left = mid + 1;
+      //   count++;
+      //   std::cout << "Count: " << count << std::endl;
+    }
+    winners.insert(winners.begin() + left, value);
+  }
+  vec = winners;
+  _vec_merge_count++;
+}
+
+void PmergeMe::dequeFordJohnsonSort(std::deque<int>& deq) {
+  if (deq.size() <= 1) return;
+
+  std::deque<int> winners;
+  std::deque<int> losers;
+
+  for (size_t i = 0; i < deq.size(); i += 2) {
+    if (i + 1 < deq.size()) {
+      if (deq[i] < deq[i + 1]) {
+        winners.push_back(deq[i + 1]);
+        losers.push_back(deq[i]);
+      } else {
+        winners.push_back(deq[i]);
+        losers.push_back(deq[i + 1]);
+      }
+      count++;
+    } else {
+      winners.push_back(deq[i]);
+    }
+  }
+
+  dequeFordJohnsonSort(winners);
+
+  for (size_t i = losers.size(); i-- > 0;) {
+    int value = losers[i];
+    size_t left = 0;
+    size_t right = jacobsthal_recursive(_deq_merge_count);
+    while (left < right) {
+      size_t mid = left + (right - left) / 2;
+      if (value < winners[mid])
+        right = mid;
+      else
+        left = mid + 1;
+      count++;
+      std::cout << "Count: " << count << std::endl;
+    }
+    winners.insert(winners.begin() + left, value);
+  }
+  deq = winners;
+  _deq_merge_count++;
+}
+
+PmergeMe::PmergeMe() {
+  _vec_merge_count = 0;
+  _deq_merge_count = 0;
+}
 
 PmergeMe::~PmergeMe() {}
 
-PmergeMe::PmergeMe(const PmergeMe& PmergeMeClass) { *this = PmergeMeClass; }
-
-PmergeMe& PmergeMe::operator=(const PmergeMe& PmergeMeClass) {
-  if (this != &PmergeMeClass) {
+bool PmergeMe::initContainers(int argc, char** argv) {
+  for (int i = 1; i < argc; ++i) {
+    std::string token(argv[i]);
+    if (token.empty() ||
+        token.find_first_not_of("0123456789") != std::string::npos ||
+        token == "0") {
+      return false;
+    }
+    int num = std::atoi(token.c_str());
+    _vec.push_back(num);
+    _deq.push_back(num);
   }
-  return *this;
+  return true;
 }
 
-void PmergeMe::createPairs(std::deque<int>& arr, std::deque< std::deque<int> >& pairs, std::deque<int>& leftovers) {
-    for (size_t i = 0; i + 1 < arr.size(); i += 2) {
-        std::deque<int> pair(2);
-        int a = arr[i];
-        int b = arr[i + 1];
-        if (a < b) {
-            pair[0] = a;
-            pair[1] = b;
-        } else {
-            pair[0] = b;
-            pair[1] = a;
-        }
-        pairs.push_back(pair);
-    }
-
-    // 奇数個の要素がある場合、最後の要素を残す
-    if (arr.size() % 2 != 0) {
-        leftovers.push_back(arr.back());
-    }
+std::string PmergeMe::getUnsortedSequence() const {
+  std::ostringstream oss;
+  for (size_t i = 0; i < _vec.size(); ++i) oss << _vec[i] << " ";
+  return oss.str();
 }
 
-void PmergeMe::sortLargeValues(std::deque< std::deque<int> >& pairs) {
-    // 大きい値を基準にペアをソート
-    std::sort(pairs.begin(), pairs.end(), ComparePairs());
+std::string PmergeMe::getSortedSequenceVector() const {
+  std::ostringstream oss;
+  for (size_t i = 0; i < _vec.size(); ++i) oss << _vec[i] << " ";
+  return oss.str();
 }
 
-bool ComparePairs::operator()(const std::deque<int>& a, const std::deque<int>& b) const {
-    return a[1] < b[1]; // 2つ目の要素（大きい方）でソート
+std::string PmergeMe::getSortedSequenceDeque() const {
+  std::ostringstream oss;
+  for (size_t i = 0; i < _deq.size(); ++i) oss << _deq[i] << " ";
+  return oss.str();
 }
 
-void PmergeMe::sortWithDeque(std::deque<int>& arr) {
-    if (arr.size() < 2) {
-        // 要素が1個以下ならソート不要
-        return;
-    }
+void PmergeMe::sortVector() { vectorFordJohnsonSort(_vec); }
 
-    // 1. ペアを作成
-    std::deque< std::deque<int> > pairs;
-    std::deque<int> leftovers;
-    createPairs(arr, pairs, leftovers);
+void PmergeMe::sortDeque() { dequeFordJohnsonSort(_deq); }
 
-    // 2. ペアの大きい値のグループをソート
-    sortLargeValues(pairs);
-
-    // 3. ソートされた結果を出力
-    std::cout << "Sorted pairs (by large values):" << std::endl;
-    for (size_t i = 0; i < pairs.size(); ++i) {
-        std::cout << "(" << pairs[i][0] << ", " << pairs[i][1] << ") ";
-    }
-    std::cout << std::endl;
-
-    // 残った値を出力（奇数個の要素の場合）
-    if (!leftovers.empty()) {
-        std::cout << "Leftover: " << leftovers.front() << std::endl;
-    }
-}
-
+size_t PmergeMe::getSize() const { return _vec.size(); }

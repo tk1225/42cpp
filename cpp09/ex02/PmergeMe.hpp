@@ -1,36 +1,41 @@
-#ifndef PmergeMe_HPP
-#define PmergeMe_HPP
+#ifndef PMERGEME_HPP
+#define PMERGEME_HPP
 
 #include <deque>
-#include <iostream>
-#include <sstream>
-#include <stack>
-#include <stdexcept>
 #include <string>
+#include <vector>
 
 class PmergeMe {
  public:
   PmergeMe();
-  PmergeMe(const PmergeMe& PmergeMeClass);
-  PmergeMe& operator=(const PmergeMe& PmergeMeClass);
   ~PmergeMe();
 
-  void sortWithDeque(std::deque<int>& arr);
+  bool initContainers(int argc, char** argv);
+
+  std::string getUnsortedSequence() const;
+
+  std::string getSortedSequenceVector() const;
+
+  std::string getSortedSequenceDeque() const;
+
+  void sortVector();
+
+  void sortDeque();
+
+  size_t getSize() const;
+
+  long jacobsthal_recursive(int n);
+
+  void vectorFordJohnsonSort(std::vector<int>& vec);
+
+  void dequeFordJohnsonSort(std::deque<int>& deq);
 
  private:
-  struct Pair {
-    int small;
-    int large;
-    Pair(int a, int b) : small(a), large(b) {}
-  };
+  std::vector<int> _vec;
+  std::deque<int> _deq;
 
-  void createPairs(std::deque<int>& arr, std::deque<std::deque<int> >& pairs,
-                   std::deque<int>& leftovers);
-  void sortLargeValues(std::deque<std::deque<int> >& pairs);
-};
-
-struct ComparePairs {
-    bool operator()(const std::deque<int>& a, const std::deque<int>& b) const;
+  int _vec_merge_count;
+  int _deq_merge_count;
 };
 
 #endif
