@@ -7,6 +7,8 @@
 int vec_count = 0;
 int deq_count = 0;
 
+size_t tmp = 21;
+
 static unsigned long jacobsthal(unsigned int n) {
   if (n == 0) return 0;
   if (n == 1) return 1;
@@ -27,16 +29,16 @@ size_t PmergeMe::binarySearchInsertPosition(const std::vector<int>& sorted,
                                             int value, int minus) {
   size_t left = 0, right = sorted.size() - minus;
   while (left < right) {
-    size_t mid = left + (right - left) / 2;
+    size_t mid = (left + right) / 2;
     if (value < sorted[mid])
       right = mid;
     else
       left = mid + 1;
-    deq_count++;
-    // vec_count++;
-    // std::cout << "compare" << value << "vs" << sorted[mid] << std::endl;
-    // std::cout << vec_count << std::endl;
-    std::cout << deq_count << std::endl;
+    // deq_count++;
+    vec_count++;
+    std::cout << "compare" << value << "vs" << sorted[mid] << std::endl;
+    std::cout << vec_count << std::endl;
+    // std::cout << deq_count << std::endl;
   }
   return left;
 }
@@ -83,52 +85,57 @@ std::vector<size_t> PmergeMe::computeInsertionOrder(size_t losersCount) {
   return order;
 }
 
-void PmergeMe::vectorFordJohnsonSort(std::vector<int>& vec) {
-  if (vec.size() <= 1) return;
+void PmergeMe::vectorFordJohnsonSort(std::vector<int>& before_w,
+                                     std::vector<int>& before_l) {
+  if (before_w.size() <= 1) return;
+  (void)before_l;
 
   std::vector<int> winners;
   std::vector<int> losers;
-  for (size_t i = 0; i < vec.size(); i += 2) {
-    if (i + 1 < vec.size()) {
-      if (vec[i] < vec[i + 1]) {
-        winners.push_back(vec[i + 1]);
-        losers.push_back(vec[i]);
+  for (size_t i = 0; i < before_w.size(); i += 2) {
+    if (i + 1 < before_w.size()) {
+      if (before_w[i] < before_w[i + 1]) {
+        winners.push_back(before_w[i + 1]);
+        losers.push_back(before_w[i]);
       } else {
-        winners.push_back(vec[i]);
-        losers.push_back(vec[i + 1]);
+        winners.push_back(before_w[i]);
+        losers.push_back(before_w[i + 1]);
       }
-      // vec_count++;
+      vec_count++;
     } else {
-      losers.push_back(vec[i]);
+      losers.push_back(before_w[i]);
     }
     // std::cout << vec_count << std::endl;
   }
 
-  vectorFordJohnsonSort(winners);
+  vectorFordJohnsonSort(winners, losers);
 
   std::vector<size_t> insertionOrder = computeInsertionOrder(losers.size());
 
-  // std::cout << "Insertion Order: ";
-  // for (size_t i = 0; i < insertionOrder.size(); ++i) {
-  //     std::cout << insertionOrder[i] << " ";
-  // }
+  std::cout << "Insertion Order: ";
+  for (size_t i = 0; i < insertionOrder.size(); ++i) {
+    std::cout << insertionOrder[i] << " ";
+  }
 
-  // std::cout << std::endl;;
+  std::cout << std::endl;
+  ;
 
-  // std::cout << "Loser: ";
-  // for (size_t i = 0; i < losers.size(); ++i) {
-  //     std::cout << losers[i] << " ";
-  // }
+  std::cout << "Loser: ";
+  for (size_t i = 0; i < losers.size(); ++i) {
+    std::cout << losers[i] << " ";
+  }
 
-  // std::cout << std::endl;;
+  std::cout << std::endl;
+  ;
 
-  // std::cout << "winner: ";
-  // for (size_t i = 0; i < winners.size(); ++i) {
-  //   std::cout << winners[i] << " ";
-  // }
-  // std::cout << std::endl;;
+  std::cout << "winner: ";
+  for (size_t i = 0; i < winners.size(); ++i) {
+    std::cout << winners[i] << " ";
+  }
+  std::cout << std::endl;
+  ;
 
-  // std::cout << "*************" << std::endl;
+  std::cout << "*************" << std::endl;
 
   if (!losers.empty()) winners.insert(winners.begin(), losers[0]);
 
@@ -143,7 +150,41 @@ void PmergeMe::vectorFordJohnsonSort(std::vector<int>& vec) {
       winners.insert(winners.begin() + pos, value);
     }
   }
-  vec = winners;
+
+  std::vector<int> copy_before_l = before_l;
+  // std::vector<int> copy_before_w = before_w;
+
+  std::cout << "*************" << std::endl;
+
+  for (size_t i = 0; i < winners.size(); ++i) {
+    std::cout << winners[i] << " ";
+  }
+
+  std::cout << std::endl;
+
+  for (size_t i = 0; i < before_w.size(); ++i) {
+    std::cout << before_w[i] << " ";
+  }
+
+  // loser sort
+  if (winners.size() == tmp) {
+    before_w = winners;
+    return;
+  }
+  for (size_t i = 0; i < winners.size(); ++i) {
+    // winners[i];
+    std::cout << "*************" << std::endl;
+
+    for (size_t j = 0; j < before_w.size(); ++j) {
+      std::cout << "*************" << std::endl;
+
+      if (winners[i] == before_w[j]) {
+        before_l[i] = copy_before_l[j];
+      }
+    }
+  }
+
+  before_w = winners;
 }
 
 void PmergeMe::dequeFordJohnsonSort(std::deque<int>& deq) {

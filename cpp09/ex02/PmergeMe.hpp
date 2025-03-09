@@ -9,7 +9,7 @@ public:
     PmergeMe();
     ~PmergeMe();
 
-    void vectorFordJohnsonSort(std::vector<int>& vec);
+    void vectorFordJohnsonSort(std::vector<int>& w, std::vector<int>& l);
     void dequeFordJohnsonSort(std::deque<int>& deq);
 
 private:

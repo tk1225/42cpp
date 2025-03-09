@@ -31,15 +31,16 @@ int main(int argc, char** argv) {
     std::cout << "Before: " << ossBefore.str() << std::endl;
 
     std::vector<int> vecCopy = vec;
+    std::vector<int> vecL;
     clock_t start_vector = clock();
     PmergeMe sorter;
-    sorter.vectorFordJohnsonSort(vecCopy);
+    sorter.vectorFordJohnsonSort(vecCopy, vecL);
     clock_t end_vector = clock();
     double duration_vector = (double)(end_vector - start_vector) * 1000000.0 / CLOCKS_PER_SEC;
 
     std::deque<int> deqCopy = deq;
     clock_t start_deque = clock();
-    sorter.dequeFordJohnsonSort(deqCopy);
+    // sorter.dequeFordJohnsonSort(deqCopy);
     clock_t end_deque = clock();
     double duration_deque = (double)(end_deque - start_deque) * 1000000.0 / CLOCKS_PER_SEC;
 
@@ -51,9 +52,9 @@ int main(int argc, char** argv) {
         ossAfterDeq << deqCopy[i] << " ";
     }
     
-    std::cout << "After (vector): " << ossAfterVec.str() << std::endl;
+    std::cout << "After : " << ossAfterVec.str() << std::endl;
     std::cout << "After (deque) : " << ossAfterDeq.str() << std::endl;
-    
+
     std::cout << "Time to process a range of " << vec.size() 
               << " elements with std::vector : " << duration_vector << " us" << std::endl;
     std::cout << "Time to process a range of " << deq.size() 
