@@ -25,20 +25,34 @@ PmergeMe::~PmergeMe() {}
 
 void PmergeMe::setSize(size_t size) { _size = size; }
 
-size_t PmergeMe::binarySearchInsertPosition(const std::vector<int>& sorted,
-                                            int value, int minus) {
+// size_t PmergeMe::binarySearchInsertPosition(const std::vector<int>& sorted,
+//                                             int value, int minus) {
+//   size_t left = 0, right = minus;
+//   while (left < right) {
+//     size_t mid = (left + right) / 2;
+//     if (value < sorted[mid])
+//       right = mid;
+//     else
+//       left = mid + 1;
+//     // deq_count++;
+//     vec_count++;
+//     // std::cout << "compare" << value << "vs" << sorted[mid] << std::endl;
+//     std::cout << vec_count << std::endl;
+//     // std::cout << deq_count << std::endl;
+//   }
+//   return left;
+// }
+
+template <typename Container>
+size_t binarySearchInsertPosition(const Container& sorted, int value, size_t minus) {
   size_t left = 0, right = minus;
   while (left < right) {
-    size_t mid = (left + right) / 2;
+    size_t mid = left + (right - left) / 2;
     if (value < sorted[mid])
       right = mid;
     else
       left = mid + 1;
-    // deq_count++;
     vec_count++;
-    // std::cout << "compare" << value << "vs" << sorted[mid] << std::endl;
-    std::cout << vec_count << std::endl;
-    // std::cout << deq_count << std::endl;
   }
   return left;
 }
@@ -171,39 +185,68 @@ void PmergeMe::vectorFordJohnsonSort(std::vector<int>& before_w,
   before_w = winners;
 }
 
-void PmergeMe::dequeFordJohnsonSort(std::deque<int>& deq) {
-  if (deq.size() <= 1) return;
+void PmergeMe::dequeFordJohnsonSort(std::deque<int>& before_w, std::deque<int>& before_l) {
+  if (before_w.size() <= 1)
+    return;
+  (void)before_l;
 
   std::deque<int> winners;
   std::deque<int> losers;
-  for (size_t i = 0; i < deq.size(); i += 2) {
-    if (i + 1 < deq.size()) {
-      if (deq[i] < deq[i + 1]) {
-        winners.push_back(deq[i + 1]);
-        losers.push_back(deq[i]);
+  for (size_t i = 0; i < before_w.size(); i += 2) {
+    if (i + 1 < before_w.size()) {
+      if (before_w[i] < before_w[i + 1]) {
+        winners.push_back(before_w[i + 1]);
+        losers.push_back(before_w[i]);
       } else {
-        winners.push_back(deq[i]);
-        losers.push_back(deq[i + 1]);
+        winners.push_back(before_w[i]);
+        losers.push_back(before_w[i + 1]);
       }
-      deq_count++;
+      vec_count++;
     } else {
-      losers.push_back(deq[i]);
+      losers.push_back(before_w[i]);
     }
   }
 
-  dequeFordJohnsonSort(winners);
+  // 再帰呼び出し: deque版のソート関数を呼ぶ
+  dequeFordJohnsonSort(winners, losers);
 
-  if (!losers.empty()) winners.insert(winners.begin(), losers[0]);
-
+  // losersの要素数に応じた挿入順序を取得
   std::vector<size_t> insertionOrder = computeInsertionOrder(losers.size());
-  std::vector<int> winnersVec(winners.begin(), winners.end());
+
+  // losersが空でなければ、最初の要素を winners の先頭に挿入
+  if (!losers.empty())
+    winners.insert(winners.begin(), losers[0]);
+
+  std::deque<int> copy_winner = winners;
   for (size_t j = 0; j < insertionOrder.size(); j++) {
     size_t idx = insertionOrder[j] - 1;
     if (idx < losers.size()) {
       int value = losers[idx];
-      size_t pos = binarySearchInsertPosition(winnersVec, value, j + 1);
-      winnersVec.insert(winnersVec.begin() + pos, value);
+
+      size_t index;
+      for (index = 0; index < winners.size(); index++) {
+        if (winners[index] == copy_winner[idx])
+          break;
+      }
+      // binarySearchInsertPositionはdequeでも使える前提
+      size_t pos = binarySearchInsertPosition(winners, value, index + 1);
+      winners.insert(winners.begin() + pos, value);
     }
   }
-  deq.assign(winnersVec.begin(), winnersVec.end());
+
+  std::deque<int> copy_before_l = before_l;
+
+  // loserの並び順が最終的なサイズと一致していればソート完了
+  if (winners.size() == _size) {
+    before_w = winners;
+    return;
+  }
+  for (size_t i = 0; i < winners.size(); ++i) {
+    for (size_t j = 0; j < before_w.size(); ++j) {
+      if (winners[i] == before_w[j]) {
+        before_l[i] = copy_before_l[j];
+      }
+    }
+  }
+  before_w = winners;
 }
