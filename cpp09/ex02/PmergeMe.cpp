@@ -25,24 +25,6 @@ PmergeMe::~PmergeMe() {}
 
 void PmergeMe::setSize(size_t size) { _size = size; }
 
-// size_t PmergeMe::binarySearchInsertPosition(const std::vector<int>& sorted,
-//                                             int value, int minus) {
-//   size_t left = 0, right = minus;
-//   while (left < right) {
-//     size_t mid = (left + right) / 2;
-//     if (value < sorted[mid])
-//       right = mid;
-//     else
-//       left = mid + 1;
-//     // deq_count++;
-//     vec_count++;
-//     // std::cout << "compare" << value << "vs" << sorted[mid] << std::endl;
-//     std::cout << vec_count << std::endl;
-//     // std::cout << deq_count << std::endl;
-//   }
-//   return left;
-// }
-
 template <typename Container>
 size_t binarySearchInsertPosition(const Container& sorted, int value, size_t minus) {
   size_t left = 0, right = minus;
