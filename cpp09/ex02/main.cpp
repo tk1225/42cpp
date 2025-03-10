@@ -16,6 +16,8 @@ int main(int argc, char** argv) {
     std::deque<int> deq;
     std::ostringstream ossBefore;
 
+    size_t size = 0;
+
     for (int i = 1; i < argc; ++i) {
         std::string token(argv[i]);
         if (token.empty() || token.find_first_not_of("0123456789") != std::string::npos || token == "0") {
@@ -26,14 +28,17 @@ int main(int argc, char** argv) {
         vec.push_back(num);
         deq.push_back(num);
         ossBefore << num << " ";
+        size++;
     }
-    
+
     std::cout << "Before: " << ossBefore.str() << std::endl;
 
     std::vector<int> vecCopy = vec;
     std::vector<int> vecL;
     clock_t start_vector = clock();
     PmergeMe sorter;
+
+    sorter.setSize(size);
     sorter.vectorFordJohnsonSort(vecCopy, vecL);
     clock_t end_vector = clock();
     double duration_vector = (double)(end_vector - start_vector) * 1000000.0 / CLOCKS_PER_SEC;
