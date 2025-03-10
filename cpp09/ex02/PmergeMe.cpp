@@ -207,13 +207,10 @@ void PmergeMe::dequeFordJohnsonSort(std::deque<int>& before_w, std::deque<int>& 
     }
   }
 
-  // 再帰呼び出し: deque版のソート関数を呼ぶ
   dequeFordJohnsonSort(winners, losers);
 
-  // losersの要素数に応じた挿入順序を取得
   std::vector<size_t> insertionOrder = computeInsertionOrder(losers.size());
 
-  // losersが空でなければ、最初の要素を winners の先頭に挿入
   if (!losers.empty())
     winners.insert(winners.begin(), losers[0]);
 
@@ -228,7 +225,6 @@ void PmergeMe::dequeFordJohnsonSort(std::deque<int>& before_w, std::deque<int>& 
         if (winners[index] == copy_winner[idx])
           break;
       }
-      // binarySearchInsertPositionはdequeでも使える前提
       size_t pos = binarySearchInsertPosition(winners, value, index + 1);
       winners.insert(winners.begin() + pos, value);
     }
@@ -236,7 +232,6 @@ void PmergeMe::dequeFordJohnsonSort(std::deque<int>& before_w, std::deque<int>& 
 
   std::deque<int> copy_before_l = before_l;
 
-  // loserの並び順が最終的なサイズと一致していればソート完了
   if (winners.size() == _size) {
     before_w = winners;
     return;
