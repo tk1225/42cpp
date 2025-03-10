@@ -64,7 +64,7 @@ int main(int argc, char** argv) {
   }
 
   std::cout << "After : " << ossAfterVec.str() << std::endl;
-  std::cout << "After (deque) : " << ossAfterDeq.str() << std::endl;
+  // std::cout << "After (deque) : " << ossAfterDeq.str() << std::endl;
 
   std::cout << "Time to process a range of " << vec.size()
             << " elements with std::vector : " << duration_vector << " us"
