@@ -135,7 +135,6 @@ void PmergeMe::vectorFordJohnsonSort(std::vector<int>& before_w,
   // std::cout << std::endl;
   // ;
 
-  // std::cout << "*************" << std::endl;
   if (!losers.empty()) winners.insert(winners.begin(), losers[0]);
 
   std::vector<int> copy_winner;
